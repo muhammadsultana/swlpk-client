@@ -5,6 +5,7 @@ import Admin from './views/Admin.vue'
 import Login from './views/Login.vue'
 import Detail from './views/DetailLapak.vue'
 import SearchResult from './components/SearchResult.vue'
+import TambahLapak from './components/TambahLapak.vue'
 
 Vue.use(Router)
 
@@ -44,6 +45,11 @@ export default new Router({
       path: '/search',
       name: 'SearchResult',
       component: SearchResult
+    },
+    {
+      path: '/tambah-lapak',
+      name: 'TambahLapak',
+      component: TambahLapak
     }
   ]
 })

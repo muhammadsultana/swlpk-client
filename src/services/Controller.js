@@ -1,10 +1,10 @@
 import API from '@/services/APIService'
 
 export default {
-  index () {
-    return API().get('posts')
+  register (credentials) {
+    return API().post('register', credentials)
   },
-  details (lapakId) {
-    return API().get(`posts/${lapakId}`)
+  login (credentials) {
+    return API().post('login', credentials)
   }
 }

@@ -1,14 +1,16 @@
 <template>
   <div>
-    <v-carousel max>
-      <v-carousel-item
-        v-for="(image,i) in images"
-        :key="i"
-        :src="image.src"
-        reverse-transition="fade"
-        transition="fade"
-      ></v-carousel-item>
-    </v-carousel>
+    <v-flex xs12>
+      <v-carousel max>
+        <v-carousel-item
+          v-for="(image,i) in images"
+          :key="i"
+          :src="image.src"
+          reverse-transition="fade"
+          transition="fade"
+        ></v-carousel-item>
+      </v-carousel>
+    </v-flex>
 
     <v-container fluid>
       <h2 class="text-xs-left">{{ post.title }}</h2>

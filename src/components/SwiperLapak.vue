@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import Controller from '@/services/Controller'
+// import Controller from '@/services/Controller'
 
 export default {
   data () {
@@ -122,11 +122,11 @@ export default {
     async swiperOptions () {
       return this.$options.swiperOption
     }
-  },
-  async created () {
-    this.posts = (await Controller.index()).data
-    await this.swiperOptions()
   }
+  // async created () {
+  //   this.posts = (await Controller.index()).data
+  //   await this.swiperOptions()
+  // }
 }
 </script>
 
