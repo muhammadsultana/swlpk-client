@@ -14,7 +14,7 @@
  <v-container grid-list-md>
 <v-card
     class="mx-auto"
-    max-width="1000"
+    max-width="800"
   >
     <v-card-title class="title font-weight-regular justify-space-between">
       <span>{{ currentTitle }}</span>
@@ -31,43 +31,76 @@
       <v-window-item :value="1">
         <v-card-text>
           <v-text-field
-            label="Email"
-            value="john@vuetifyjs.com"
+            label="Nama Lapak"
+            v-model="lapak.nama_lapak"
           ></v-text-field>
-          <span class="caption grey--text text--darken-1">
-            This is the email you will use to login to your Vuetify account
-          </span>
+          <v-select
+            flat
+            :items="items"
+            class="pt-2 pl-2 pr-2"
+            label="Kategori"
+            v-model="lapak.kategori"
+            solo
+            ></v-select>
+          <v-text-field
+            label="Harga"
+          ></v-text-field>
+          <v-text-field
+          label="Alamat"
+          v-model="lapak.lokasi.alamat"></v-text-field>
+          <v-layout row>
+              <v-flex md4 xs12>
+                <v-select
+                label="Provinsi"
+                v-model="lapak.lokasi.provinsi"></v-select>
+              </v-flex>
+              <v-flex md4 xs12>
+                <v-select
+                label="Kota"
+                v-model="lapak.lokasi.kota">
+                </v-select>
+              </v-flex>
+              <v-flex md4 xs12>
+                <v-select
+                label="Kecamatan"
+                v-model="lapak.lokasi.kecamatan"></v-select>
+              </v-flex>
+          </v-layout>
+          <v-img>
+            <img src="https://developers.google.com/maps/solutions/images/storelocator_clothing.png" height="100" alt="">
+          </v-img>
         </v-card-text>
       </v-window-item>
 
       <v-window-item :value="2">
-        <v-card-text>
-          <v-text-field
-            label="Password"
-            type="password"
-          ></v-text-field>
-          <v-text-field
-            label="Confirm Password"
-            type="password"
-          ></v-text-field>
-          <span class="caption grey--text text--darken-1">
-            Please enter a password for your account
-          </span>
-        </v-card-text>
+        <v-container grid-list-xl>
+          <b-form-file v-model="lapak.file" :state="Boolean(lapak.file)" placeholder="Choose a file..."></b-form-file>
+          <div class="mt-3">Selected file: {{ lapak.file && lapak.file.name }}</div>
+        </v-container>
+        <v-container>
+          <v-textarea
+          name="input-7-1"
+          solo
+          label="Deskripsi"
+          v-model="lapak.deksripsi"
+          auto-grow
+          ></v-textarea>
+        </v-container>
       </v-window-item>
 
       <v-window-item :value="3">
-        <div class="pa-3 text-xs-center">
-          <v-img
-            class="mb-3"
-            contain
-            height="128"
-            width="1000"
-            src="https://cdn.vuetifyjs.com/images/logos/v.svg"
-          ></v-img>
-          <h3 class="title font-weight-light mb-2">Welcome to Vuetify</h3>
-          <span class="caption grey--text">Thanks for signing up!</span>
-        </div>
+        <v-container>
+          <v-text-field
+            label="Nomor Handphone"
+            v-model="lapak.user.no_hp"
+            :mask="'####-####-#######'">
+          </v-text-field>
+          <v-text-field
+            label="Nomor WhatsApp"
+            v-model="lapak.user.no_hp"
+            :mask="'####-####-#######'">
+          </v-text-field>
+        </v-container>
       </v-window-item>
     </v-window>
 
@@ -83,12 +116,22 @@
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
+        v-if="step < 3"
         :disabled="step === 3"
         color="primary"
         depressed
         @click="step++"
       >
         Next
+      </v-btn>
+      <v-btn
+        v-if="step === 3"
+        class="green"
+        dark
+        depressed
+        @click="submit"
+      >
+        Submit
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -99,17 +142,37 @@
 
 <script>
 export default {
-  data: () => ({
-    step: 1
-  }),
+  data () {
+    return {
+      step: 1,
+      lapak: {
+        kategori: '',
+        nama_lapak: '',
+        harga: '',
+        lokasi: {
+          alamat: '',
+          provinsi: '',
+          kota: '',
+          kecamatan: ''
+        },
+        file: null,
+        deskripsi: '',
+        user: {
+          no_hp: '',
+          no_wa: ''
+        }
+      }
+    }
+  },
 
   computed: {
     currentTitle () {
       switch (this.step) {
-        case 1: return 'Sign-up'
-        case 2: return 'Create a password'
-        default: return 'Account created'
+        case 1: return 'Informasi umum'
+        case 2: return 'Detail lapak'
+        case 3: return 'Kontak personal'
       }
+      return this.step
     }
   }
 }

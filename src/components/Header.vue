@@ -22,9 +22,18 @@
             <v-btn flat dark
             slot="activator"
             @click="dialog = true"
+            v-if="!$store.state.isUserLoggedIn"
             >
             Log in/Register
             </v-btn>
+
+            <v-btn flat dark
+            @click="logout()"
+            v-if="$store.state.isUserLoggedIn"
+            >
+            Logout
+            </v-btn>
+
             <v-dialog
             v-model="dialog"
             width="400"
@@ -52,6 +61,7 @@
                 </v-toolbar>
                 <v-tab-item>
                   <v-card>
+                    <div class="error" v-html="error"></div>
                     <v-card-title>
                       <v-container grid-list-xl>
                         <v-layout row>
@@ -66,7 +76,7 @@
                             v-model="user.password">
                             </v-text-field>
                             <v-btn class="green"
-                            @click="login()">Login</v-btn><br>
+                            @click="login">Login</v-btn><br>
                             <a class="caption navy--text" href="#">Lost your password?</a>
                           </v-flex>
                         </v-layout>
@@ -76,6 +86,8 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-card>
+                    <div class="error" v-html="error"></div>
+
                     <v-card-title>
                       <v-container grid-list-md>
                         <v-layout row>
@@ -148,8 +160,8 @@ export default {
     return {
       dialog: false,
       checkbox: false,
-      users: null,
       hidden: false,
+      error: '',
       user: [
         {
           firstname: '',
@@ -176,7 +188,6 @@ export default {
           email: this.user.email,
           password: this.user.password
         })
-        console.log('signed up')
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
       } catch (error) {
@@ -187,11 +198,26 @@ export default {
       try {
         const response = await Controller.login({
           email: this.user.email,
-          password: this.user.password
+          password: this.user.password,
+          firstname: this.user.firstname,
+          lastname: this.user.lastname,
+          username: this.user.username
+
         })
-        console.log('logged in')
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
+        this.dialog = false
+      } catch (error) {
+        this.error = error.response.data.error
+      }
+    },
+    logout () {
+      try {
+        this.$store.dispatch('setToken', null)
+        this.$store.dispatch('setUser', null)
+        this.$router.push({
+          name: 'home'
+        })
       } catch (error) {
         this.error = error.response.data.error
       }
