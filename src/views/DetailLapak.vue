@@ -141,7 +141,7 @@ export default {
   },
   data () {
     return {
-      post: [],
+      post: {},
       images: [
         {
           src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'

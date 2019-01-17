@@ -36,15 +36,40 @@
           ></v-text-field>
           <v-select
             flat
-            :items="items"
+            :items="option"
             class="pt-2 pl-2 pr-2"
             label="Kategori"
             v-model="lapak.kategori"
             solo
-            ></v-select>
-          <v-text-field
-            label="Harga"
-          ></v-text-field>
+          ></v-select>
+          {{ lapak.kategori }}
+          <span class="title">Harga</span>
+          <v-layout row>
+            <v-flex xs12 md3>
+              <v-text-field
+              label="Per Jam"
+              prepend-icon="attach_money"
+              v-model="lapak.harga.jam"></v-text-field>
+            </v-flex>
+            <v-flex xs12 md3>
+              <v-text-field
+              label="Per Hari"
+              prepend-icon="attach_money"
+              v-model="lapak.harga.harian"></v-text-field>
+            </v-flex>
+            <v-flex xs12 md3>
+              <v-text-field
+              label="Per Bulan"
+              prepend-icon="attach_money"
+              v-model="lapak.harga.bulanan"></v-text-field>
+            </v-flex>
+            <v-flex xs12 md3>
+              <v-text-field
+              label="Per Tahun"
+              prepend-icon="attach_money"
+              v-model="lapak.harga.tahunan"></v-text-field>
+            </v-flex>
+          </v-layout>
           <v-text-field
           label="Alamat"
           v-model="lapak.lokasi.alamat"></v-text-field>
@@ -129,7 +154,7 @@
         class="green"
         dark
         depressed
-        @click="submit"
+        @click="postLapak"
       >
         Submit
       </v-btn>
@@ -141,30 +166,40 @@
 </template>
 
 <script>
+import LapakController from '@/services/LapakController'
+
 export default {
   data () {
     return {
       step: 1,
+      option: [
+        'hehe',
+        'huhu'
+      ],
       lapak: {
         kategori: '',
-        nama_lapak: '',
-        harga: '',
+        nama_lapak: null,
+        harga: {
+          jam: null,
+          harian: null,
+          bulanan: null,
+          tahunan: null
+        },
         lokasi: {
-          alamat: '',
-          provinsi: '',
-          kota: '',
-          kecamatan: ''
+          alamat: null,
+          provinsi: null,
+          kota: null,
+          kecamatan: null
         },
         file: null,
-        deskripsi: '',
+        deskripsi: null,
         user: {
-          no_hp: '',
-          no_wa: ''
+          no_hp: null,
+          no_wa: null
         }
       }
     }
   },
-
   computed: {
     currentTitle () {
       switch (this.step) {
@@ -173,6 +208,16 @@ export default {
         case 3: return 'Kontak personal'
       }
       return this.step
+    }
+  },
+  methods: {
+    async postLapak () {
+      try {
+        await LapakController.post(this.lapak)
+        console.log('success')
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }

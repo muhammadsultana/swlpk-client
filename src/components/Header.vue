@@ -162,17 +162,15 @@ export default {
       checkbox: false,
       hidden: false,
       error: '',
-      user: [
-        {
-          firstname: '',
-          lastname: '',
-          username: '',
-          email: '',
-          password: '',
-          wa: '',
-          no_hp: ''
-        }
-      ]
+      user: {
+        firstname: '',
+        lastname: '',
+        username: '',
+        email: '',
+        password: '',
+        wa: '',
+        no_hp: ''
+      }
     }
   },
   methods: {
