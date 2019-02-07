@@ -6,12 +6,19 @@ import Vuetify from 'vuetify'
 import BootstrapVue from 'bootstrap-vue'
 import { sync } from 'vuex-router-sync'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import axios from 'axios'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import './registerServiceWorker'
 import 'vuetify/dist/vuetify.min.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'swiper/dist/css/swiper.css'
+
+Vue.prototype.$http = axios
+const token = localStorage.getItem('token')
+if (token) {
+  Vue.prototype.$http.defaults.headers.common['Authorization'] = token
+}
 
 Vue.use(BootstrapVue)
 Vue.use(VueAwesomeSwiper)
