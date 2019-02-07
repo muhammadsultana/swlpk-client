@@ -58,22 +58,38 @@
         <v-layout style="background-color: #359AD6;
         color: white">
         <v-container>
-          <v-flex xs12 md4>
-            <p>Aceh</p>
-            <p>Aceh</p>
-            <p>Aceh</p>
-            <p>Aceh</p>
-            <p>Aceh</p>
-            <p>Aceh</p>
-            <p>Aceh</p>
-            <p>Aceh</p>
-          </v-flex>
-          <v-flex xs12 md4>
-sdf
-          </v-flex>
-                    <v-flex xs12 md4>
-sdf
-          </v-flex>
+          <v-layout row>
+            <v-flex xs12 md4>
+              <p>Aceh</p>
+              <p>Sumatera Utara</p>
+              <p>Sumatera Barat</p>
+              <p>Jambi</p>
+              <p>Sumatera Selatan</p>
+              <p>Bengkulu</p>
+              <p>Batam</p>
+              <p>Lampung</p>
+            </v-flex>
+            <v-flex xs12 md4>
+              <p>Aceh</p>
+              <p>Sumatera Utara</p>
+              <p>Sumatera Barat</p>
+              <p>Jambi</p>
+              <p>Sumatera Selatan</p>
+              <p>Bengkulu</p>
+              <p>Batam</p>
+              <p>Lampung</p>
+            </v-flex>
+            <v-flex xs12 md4>
+              <p>Aceh</p>
+              <p>Sumatera Utara</p>
+              <p>Sumatera Barat</p>
+              <p>Jambi</p>
+              <p>Sumatera Selatan</p>
+              <p>Bengkulu</p>
+              <p>Batam</p>
+              <p>Lampung</p>
+            </v-flex>
+          </v-layout>
         </v-container>
         </v-layout>
     </v-dialog>
@@ -83,6 +99,7 @@ sdf
 <script>
 import swiperLapak from '@/components/SwiperLapak'
 import Kota from '@/components/Kota'
+import LapakController from '@/services/LapakController'
 
 export default {
   data () {
@@ -103,12 +120,16 @@ export default {
       dialog: false,
       items: [
         'Alfamart', 'Indomaret', 'Bazaar'
-      ]
+      ],
+      post: null
     }
   },
   components: {
     'swiper': swiperLapak,
     Kota
+  },
+  async mounted () {
+    this.post = (await LapakController).data
   }
 }
 </script>

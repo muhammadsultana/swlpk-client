@@ -13,7 +13,7 @@
     </v-flex>
 
     <v-container fluid>
-      <h2 class="text-xs-left">{{ post.title }}</h2>
+      <h2 class="text-xs-left">{{ lapak.title }}</h2>
       <v-divider></v-divider>
     </v-container>
 
@@ -69,7 +69,7 @@
             <v-card-media>
               <v-window
               max>
-              {{ post.body }}
+              Hello
               </v-window>
             </v-card-media>
           </v-card>
@@ -133,7 +133,8 @@
 
 <script>
 import Footer from '@/components/Footer'
-import Controller from '@/services/Controller'
+// import Controller from '@/services/Controller'
+import LapakController from '@/services/LapakController'
 
 export default {
   components: {
@@ -141,7 +142,7 @@ export default {
   },
   data () {
     return {
-      post: {},
+      lapak: {},
       images: [
         {
           src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
@@ -160,7 +161,7 @@ export default {
   },
   async mounted () {
     const lapakId = this.$store.state.route.params.lapakId
-    this.post = (await Controller.details(lapakId)).data
+    this.lapak = (await LapakController.show(lapakId)).data
   }
 }
 </script>

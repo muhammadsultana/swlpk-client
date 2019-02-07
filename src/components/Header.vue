@@ -1,4 +1,5 @@
 <template>
+  <div>
     <v-toolbar sticky flat class="pb-4"
     style="margin-bottom: -23px">
         <v-toolbar-title class="mr-4 display-1 pt-4">
@@ -22,21 +23,21 @@
             <v-btn flat dark
             slot="activator"
             @click="dialog = true"
-            v-if="!$store.state.isUserLoggedIn"
+            v-if="!isUserLoggedIn"
             >
             Log in/Register
             </v-btn>
 
             <v-btn flat dark
             @click="logout()"
-            v-if="$store.state.isUserLoggedIn"
+            v-if="isUserLoggedIn"
             >
             Logout
             </v-btn>
 
             <v-dialog
             v-model="dialog"
-            width="400"
+            width="600"
             persistent
             >
               <v-tabs
@@ -44,7 +45,9 @@
               centered
               slider-color="red"
               >
-                <v-toolbar class="blue" flat dark>
+                <v-toolbar class="blue" flat dark
+                 v-for="pengguna in user" :key="pengguna.id"
+                >
                   <v-tab>
                     <v-icon>person</v-icon>
                     <span class="subheading white--text"> Login</span>
@@ -119,23 +122,6 @@
                             v-model="user.no_hp"
                             label="Nomor Handphone"
                             id="he"></v-text-field>
-
-                            <!-- <v-switch
-                              :label="'Apakah nomor handphone anda diatas juga termasuk nomor akun WhatsApp Anda?'"
-                              v-model="checkbox"
-                            ></v-switch>
-                            <v-text-field
-                            v-if="checkbox != hidden"
-                            :mask="'####-####-#######'"
-                            v-model="user.wa"
-                            label="Nomor WhatsApp Anda:"
-                            disabled
-                            >
-                            </v-text-field>
-                            <v-text-field
-                            v-if="checkbox != !hidden"
-                            name="register.wa"
-                            label="Nomor WhatsApp"></v-text-field> -->
                             <v-btn
                             class="green"
                             @click="register()">Register</v-btn> <br>
@@ -150,10 +136,11 @@
           </v-dialog>
         </v-toolbar-items>
     </v-toolbar>
+  </div>
 </template>
 
 <script>
-import Controller from '@/services/Controller'
+// import Controller from '@/services/Controller'
 
 export default {
   data () {
@@ -162,63 +149,53 @@ export default {
       checkbox: false,
       hidden: false,
       error: '',
-      user: {
-        firstname: '',
-        lastname: '',
-        username: '',
-        email: '',
-        password: '',
-        wa: '',
-        no_hp: ''
-      }
+      user: [
+        {
+          firstname: '',
+          lastname: '',
+          username: '',
+          email: '',
+          password: '',
+          wa: '',
+          no_hp: ''
+        }
+      ]
     }
   },
   methods: {
     navigateTo (route) {
       this.$router.push(route)
     },
-    async register () {
-      try {
-        const response = await Controller.register({
-          firstname: this.user.firstname,
-          lastname: this.user.lastname,
-          username: this.user.username,
-          email: this.user.email,
-          password: this.user.password
-        })
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setUser', response.data.user)
-      } catch (error) {
-        this.error = error.response.data.error
+    login () {
+      let data = {
+        email: this.user.email,
+        password: this.user.password
       }
-    },
-    async login () {
-      try {
-        const response = await Controller.login({
-          email: this.user.email,
-          password: this.user.password,
-          firstname: this.user.firstname,
-          lastname: this.user.lastname,
-          username: this.user.username
-
-        })
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setUser', response.data.user)
+      this.$store.dispatch('login', data).then(() => {
         this.dialog = false
-      } catch (error) {
-        this.error = error.response.data.error
-      }
+        this.$router.push('/')
+      }).catch(err => console.log(err))
+    },
+    register () {
+      this.$store.dispatch('register', {
+        email: this.user.email,
+        password: this.user.password,
+        wa: this.user.wa,
+        no_hp: this.user.no_hp
+      }).then(() => {
+        this.dialog = false
+        this.$router.push('/')
+        console.log('berhasil')
+      }).catch(err => console.log(err))
     },
     logout () {
-      try {
-        this.$store.dispatch('setToken', null)
-        this.$store.dispatch('setUser', null)
-        this.$router.push({
-          name: 'home'
-        })
-      } catch (error) {
-        this.error = error.response.data.error
-      }
+      this.$store.dispatch('logout')
+      this.$router.push('/')
+    }
+  },
+  computed: {
+    isUserLoggedIn () {
+      return this.$store.getters.isUserLoggedIn
     }
   }
 }

@@ -26,7 +26,7 @@
               class="swiper-container swiper-wrapper">
                 <!-- slide -->
                 <swiper-slide
-                 v-for="post of posts.slice(0,2)"
+                 v-for="post of posts.slice(0,10)"
                   :key="post.id">
                   <div>
                   <v-card
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-// import Controller from '@/services/Controller'
+import LapakController from '@/services/LapakController'
 
 export default {
   data () {
@@ -118,15 +118,14 @@ export default {
   methods: {
     goToDetail (route) {
       this.$router.push(route)
-    },
-    async swiperOptions () {
-      return this.$options.swiperOption
     }
+    // async swiperOptions () {
+    //   return this.$options.swiperOption
+    // }
+  },
+  async mounted () {
+    this.posts = (await LapakController.index()).data
   }
-  // async created () {
-  //   this.posts = (await Controller.index()).data
-  //   await this.swiperOptions()
-  // }
 }
 </script>
 

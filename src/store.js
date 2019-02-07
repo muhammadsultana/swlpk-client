@@ -1,34 +1,87 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Controller from './services/Controller'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   strict: true,
   state: {
-    token: null,
-    user: null,
-    isUserLoggedIn: false
+    token: localStorage.getItem('token') || '',
+    user: {},
+    hello: 'hello',
+    isUserLoggedIn: false,
+    status: ''
   },
   mutations: {
-    setToken (state, token) {
-      state.token = token
-      if (token) {
-        state.isUserLoggedIn = true
-      } else {
-        state.isUserLoggedIn = false
-      }
+    auth_request (state) {
+      state.status = 'loading'
     },
-    setUser (state, user) {
+    auth_success (state, token, user) {
+      state.status = 'success'
+      state.token = token
       state.user = user
+    },
+    auth_error (state) {
+      state.status = 'error'
+    },
+    logout (state) {
+      state.status = ''
+      state.token = ''
     }
   },
   actions: {
-    setToken ({ commit }, token) {
-      commit('setToken', token)
+    login ({ commit }, user) {
+      return new Promise((resolve, reject) => {
+        commit('auth_request')
+        Controller.login(user)
+          .then(resp => {
+            const token = resp.data.token
+            const user = resp.data.user
+            localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = token
+            commit('auth_success', token, user)
+            resolve(resp)
+          })
+          .catch(err => {
+            commit('auth_error')
+            localStorage.removeItem('token')
+            reject(err)
+          })
+      })
     },
-    setUser ({ commit }, user) {
-      commit('setUser', user)
+    register ({ commit }, user) {
+      return new Promise((resolve, reject) => {
+        commit('auth_request')
+        Controller.register(user)
+          .then(resp => {
+            const token = resp.data.token
+            const user = resp.data.user
+            localStorage.setItem('token', token)
+            axios.defaults.headers.common['Authorization'] = token
+            commit('auth_success', token, user)
+            resolve(resp)
+          })
+          .catch(err => {
+            commit('auth_error', err)
+            localStorage.removeItem('token')
+            reject(err)
+          })
+      })
+    },
+    logout ({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit('logout')
+        localStorage.removeItem('token')
+        delete axios.defaults.headers.common['Authorization']
+        resolve()
+      })
     }
+  },
+  getters: {
+    isUserLoggedIn: state => !!state.token,
+    authStatus: state => state.status,
+    user: state => state.user
   }
 })

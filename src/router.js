@@ -1,4 +1,5 @@
 import Vue from 'vue'
+// import Store from './store'
 import Router from 'vue-router'
 import Home from '@/Homepage'
 import Admin from './views/Admin.vue'
@@ -6,8 +7,21 @@ import Login from './views/Login.vue'
 import Detail from './views/DetailLapak.vue'
 import SearchResult from './components/SearchResult.vue'
 import TambahLapak from './components/TambahLapak.vue'
+import MyAccount from './views/MyAccount.vue'
 
 Vue.use(Router)
+
+// Router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requiresAuth)) {
+//     if (Store.getters.isUserLoggedIn) {
+//       next()
+//       return
+//     }
+//     next('/login')
+//   } else {
+//     next()
+//   }
+// })
 
 export default new Router({
   mode: 'history',
@@ -23,14 +37,6 @@ export default new Router({
       name: 'admin',
       component: Admin
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    // },
     {
       path: '/detail/:lapakId',
       name: 'detail',
@@ -50,6 +56,14 @@ export default new Router({
       path: '/tambah-lapak',
       name: 'TambahLapak',
       component: TambahLapak
+    },
+    {
+      path: '/myaccount',
+      name: 'myaccount',
+      component: MyAccount,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
