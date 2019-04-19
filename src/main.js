@@ -21,6 +21,7 @@ if (token) {
 }
 
 Vue.use(BootstrapVue)
+Vue.use(axios)
 Vue.use(VueAwesomeSwiper)
 Vue.config.productionTip = false
 Vue.use(Vuetify, {

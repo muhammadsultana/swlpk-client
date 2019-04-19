@@ -118,10 +118,10 @@ export default {
   methods: {
     goToDetail (route) {
       this.$router.push(route)
+    },
+    async swiperOptions () {
+      return this.$options.swiperOption
     }
-    // async swiperOptions () {
-    //   return this.$options.swiperOption
-    // }
   },
   async mounted () {
     this.posts = (await LapakController.index()).data

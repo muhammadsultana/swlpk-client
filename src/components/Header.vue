@@ -13,14 +13,6 @@
         <v-spacer></v-spacer>
         <v-toolbar-items class="pt-4">
             <v-btn flat dark
-            @click="navigateTo({name: 'admin'})">
-              Explore
-            </v-btn>
-            <v-btn flat dark
-            @click="navigateTo({name: 'admin'})">
-              Deals and Coupons
-            </v-btn>
-            <v-btn flat dark
             slot="activator"
             @click="dialog = true"
             v-if="!isUserLoggedIn"
@@ -35,6 +27,46 @@
             Logout
             </v-btn>
 
+            <v-btn flat dark
+            @click ="navigateTo({name: 'TambahLapak'})"
+            v-if="isUserLoggedIn"
+            >
+            Tambah Lapak
+            </v-btn>
+
+            <v-dialog
+            v-model="dialog_success"
+            width="300">
+              <v-toolbar
+              class="blue"
+              flat dark>
+                <v-icon
+                color="red"
+                class="pr-2 pb-3"
+                @click="dialog_success = false"
+                >close
+                </v-icon>
+              </v-toolbar>
+              <v-card>
+                <v-container
+                  fluid
+                  grid-list-lg
+                >
+                  <v-layout row wrap>
+                    <v-flex xs12>
+                      <v-card color="blue-grey darken-2" class="white--text">
+                        <v-card-title primary-title>
+                          <div>
+                            <div class="headline text-md-center">You're logged in</div>
+                            <!-- <span>Listen to your favorite artists and albums whenever and wherever, online and offline.</span> -->
+                          </div>
+                        </v-card-title>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card>
+            </v-dialog>
             <v-dialog
             v-model="dialog"
             width="600"
@@ -90,7 +122,6 @@
                 <v-tab-item>
                   <v-card>
                     <div class="error" v-html="error"></div>
-
                     <v-card-title>
                       <v-container grid-list-md>
                         <v-layout row>
@@ -124,7 +155,7 @@
                             id="he"></v-text-field>
                             <v-btn
                             class="green"
-                            @click="register()">Register</v-btn> <br>
+                            @click="register">Register</v-btn> <br>
                             <span class="caption grey--text darken-2">Your personal data will be used to support your experience throughout this website, to manage access to your account</span>
                           </v-flex>
                         </v-layout>
@@ -145,6 +176,7 @@
 export default {
   data () {
     return {
+      dialog_success: false,
       dialog: false,
       checkbox: false,
       hidden: false,
@@ -154,10 +186,12 @@ export default {
           firstname: '',
           lastname: '',
           username: '',
+          role: '',
           email: '',
           password: '',
           wa: '',
-          no_hp: ''
+          no_hp: '',
+          foto_user: ''
         }
       ]
     }
@@ -174,15 +208,20 @@ export default {
       this.$store.dispatch('login', data).then(() => {
         this.dialog = false
         this.$router.push('/')
+        console.log('berhasil')
       }).catch(err => console.log(err))
     },
     register () {
       this.$store.dispatch('register', {
+        firstname: this.user.firstname,
+        lastname: this.user.lastname,
+        role: this.user.role,
         email: this.user.email,
         password: this.user.password,
         wa: this.user.wa,
         no_hp: this.user.no_hp
       }).then(() => {
+        this.dialog_success = true
         this.dialog = false
         this.$router.push('/')
         console.log('berhasil')

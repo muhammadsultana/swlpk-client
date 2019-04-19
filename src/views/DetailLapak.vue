@@ -113,6 +113,7 @@
         <v-flex xs12 md5>
           <v-card>
             <v-card-title>
+              {{ lapak }}
               <div class="title"><v-icon>photos</v-icon> Photos</div>
             </v-card-title>
             <v-divider></v-divider>
@@ -133,7 +134,6 @@
 
 <script>
 import Footer from '@/components/Footer'
-// import Controller from '@/services/Controller'
 import LapakController from '@/services/LapakController'
 
 export default {
@@ -159,9 +159,16 @@ export default {
       ]
     }
   },
-  async mounted () {
-    const lapakId = this.$store.state.route.params.lapakId
-    this.lapak = (await LapakController.show(lapakId)).data
+  methods: {
+    fetchLapak () {
+      LapakController.show().then((resp) => {
+        this.lapak = resp.data
+        console.log(resp)
+      })
+    }
+  },
+  created: function () {
+    this.fetchLapak()
   }
 }
 </script>

@@ -1,24 +1,27 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Controller from './services/Controller'
+import LapakController from './services/LapakController'
 import axios from 'axios'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  strict: true,
   state: {
+    status: '',
     token: localStorage.getItem('token') || '',
     user: {},
-    hello: 'hello',
-    isUserLoggedIn: false,
-    status: ''
+    lapak: {}
   },
   mutations: {
+    submit_success (state, lapak) {
+      state.status = 'success'
+      state.lapak = lapak
+    },
     auth_request (state) {
       state.status = 'loading'
     },
-    auth_success (state, token, user) {
+    auth_success (state, { token, user }) {
       state.status = 'success'
       state.token = token
       state.user = user
@@ -32,6 +35,19 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    submitLapak ({ commit }, lapak) {
+      return new Promise((resolve, reject) => {
+        LapakController.posting(lapak)
+          .then(resp => {
+            const lapak = resp.data
+            commit('submit_success', lapak)
+            resolve(resp)
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+    },
     login ({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
@@ -41,7 +57,7 @@ export default new Vuex.Store({
             const user = resp.data.user
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, user)
+            commit('auth_success', { token, user })
             resolve(resp)
           })
           .catch(err => {
@@ -60,7 +76,7 @@ export default new Vuex.Store({
             const user = resp.data.user
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = token
-            commit('auth_success', token, user)
+            commit('auth_success', { token, user })
             resolve(resp)
           })
           .catch(err => {

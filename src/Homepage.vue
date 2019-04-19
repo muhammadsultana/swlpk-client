@@ -63,31 +63,31 @@
               <p>Aceh</p>
               <p>Sumatera Utara</p>
               <p>Sumatera Barat</p>
+              <p>Riau</p>
+              <p>Kepulauan Riau</p>
               <p>Jambi</p>
-              <p>Sumatera Selatan</p>
               <p>Bengkulu</p>
-              <p>Batam</p>
-              <p>Lampung</p>
+              <p>Sumatera Selatan</p>
             </v-flex>
             <v-flex xs12 md4>
-              <p>Aceh</p>
-              <p>Sumatera Utara</p>
-              <p>Sumatera Barat</p>
-              <p>Jambi</p>
-              <p>Sumatera Selatan</p>
-              <p>Bengkulu</p>
-              <p>Batam</p>
+              <p>Kepulauan Bangka Belitung</p>
               <p>Lampung</p>
+              <p>Banten</p>
+              <p>Jawa Barat</p>
+              <p>DKI Jakarta</p>
+              <p>Jawa Tengah</p>
+              <p>DI Yogyakarta</p>
+              <p>Jawa Timur</p>
             </v-flex>
             <v-flex xs12 md4>
-              <p>Aceh</p>
-              <p>Sumatera Utara</p>
-              <p>Sumatera Barat</p>
-              <p>Jambi</p>
-              <p>Sumatera Selatan</p>
-              <p>Bengkulu</p>
-              <p>Batam</p>
-              <p>Lampung</p>
+              <p>Bali</p>
+              <p>Nusa Tenggara Barat</p>
+              <p>Nusa Tenggara Timur</p>
+              <p>Kalimantan Utara</p>
+              <p>Kalimantan Barat</p>
+              <p>Kalimantan Selatan</p>
+              <p>Kalimantan Timur</p>
+              <p>Gorontalo</p>
             </v-flex>
           </v-layout>
         </v-container>

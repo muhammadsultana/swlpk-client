@@ -18,10 +18,16 @@
           <v-card>
             <v-layout row>
               <v-flex xs12 md4>
-                <v-card
-                  height="100"
+                <v-card mb-4
                 >
-                  <v-card-text>Photo</v-card-text>
+                  <v-card-text>
+                    <v-img
+                    src="https://scontent.fkno3-1.fna.fbcdn.net/v/t1.0-9/26907659_1618244744911238_7982439834245016813_n.jpg?_nc_cat=103&_nc_ht=scontent.fkno3-1.fna&oh=2cb6750c20906b3638045d464eb98e9c&oe=5D4A87E5"
+                    height="220"
+                    >
+
+                    </v-img>
+                  </v-card-text>
                 </v-card>
               </v-flex>
               <v-flex xs12 md8>
@@ -37,10 +43,10 @@
                       <p class="text-xs-left">No. WhatsApp</p>
                     </v-flex>
                     <v-flex xs12 md9>
-                      <p class="text-xs-left">{{ user }}</p>
-                      <p class="text-xs-left">Email User</p>
-                      <p class="text-xs-left">No. Handphone User</p>
-                      <p class="text-xs-left">No. WhatsApp User</p>
+                      <p class="text-xs-left">Mohammad Sulthan</p>
+                      <p class="text-xs-left">muhammadsultana@outlook.com</p>
+                      <p class="text-xs-left">082166962208</p>
+                      <p class="text-xs-left">082166962208</p>
                     </v-flex>
                   </v-layout>
                 </v-card-text>

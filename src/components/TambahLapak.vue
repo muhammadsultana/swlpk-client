@@ -1,5 +1,5 @@
-<template v-for="lapak in lapaks">
-<div  :key="lapak.id">
+<template>
+<div>
  <v-layout row>
     <v-flex xs12>
       <v-card flat max-height>
@@ -33,119 +33,68 @@
         <v-card-text>
           <v-text-field
             label="Nama Lapak"
+            v-model="lapak.Posts.judul_post"
           ></v-text-field>
-          <!-- <v-select
-            flat
-            :items="option"
-            class="pt-2 pl-2 pr-2"
-            label="Kategori"
-            v-model="KategoriId"
-            solo
-          ></v-select> -->
           <span class="title">Harga</span>
           <v-layout row>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Jam"
+              v-model="lapak.Posts.perjam"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Hari"
+              v-model="lapak.Posts.perhari"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Bulan"
+              v-model="lapak.Posts.perbulan"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Tahun"
+              v-model="lapak.Posts.pertahun"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
           </v-layout>
           <v-text-field
-          label="Alamat"
+          label="Alamat lapak"
+          v-model="lapak.alamat"
           ></v-text-field>
-          <!-- <v-layout row>
-              <v-flex md4 xs12>
-                <v-select
-                label="Provinsi"
-                v-model="Provinsi"></v-select>
-              </v-flex>
-              <v-flex md4 xs12>
-                <v-select
-                label="Kota"
-                v-model="lapak.lokasi.kota">
-                </v-select>
-              </v-flex>
-              <v-flex md4 xs12>
-                <v-select
-                label="Kecamatan"
-                v-model="lapak.lokasi.kecamatan"></v-select>
-              </v-flex>
-          </v-layout> -->
-          <v-img>
-            <img src="https://developers.google.com/maps/solutions/images/storelocator_clothing.png" height="100" alt="">
-          </v-img>
         </v-card-text>
       </v-window-item>
 
       <v-window-item :value="2">
-        <!-- <v-container grid-list-xl>
-          <b-form-file v-model="lapak.file" :state="Boolean(lapak.file)" placeholder="Choose a file..."></b-form-file>
-          <div class="mt-3">Selected file: {{ lapak.file && lapak.file.name }}</div>
-        </v-container> -->
         <v-container>
           <v-textarea
           name="input-7-1"
           solo
           label="Deskripsi"
+          v-model="lapak.Posts.deskripsi_umum"
           auto-grow
           ></v-textarea>
         </v-container>
       </v-window-item>
 
       <v-window-item :value="3">
-        <v-container>
-          <v-text-field
-            label="Nomor Handphone"
-            :mask="'####-####-#######'">
-          </v-text-field>
-          <v-text-field
-            label="Nomor WhatsApp"
-            :mask="'####-####-#######'">
-          </v-text-field>
-          <v-select
-            flat
-            :items="status_post"
-            class="pt-2 pl-2 pr-2"
-            label="Kategori"
-            solo
-          ></v-select>
-        </v-container>
-      </v-window-item>
-
-      <v-window-item :value="4">
         <v-card-text>
           <v-text-field
             label="Nama Penyedia"
+            v-model="lapak.nama_penyedia"
           ></v-text-field>
           <v-text-field
-            label="Alamat">
+            label="Alamat Penyedia"
+            v-model="lapak.Posts.alamat">
           </v-text-field>
-          <v-select
-            flat
-            :items="kecamatan"
-            class="pt-2 pl-2 pr-2"
-            label="Kategori"
-            solo
-          ></v-select>
         </v-card-text>
       </v-window-item>
     </v-window>
@@ -163,7 +112,7 @@
       <v-spacer></v-spacer>
       <v-btn
         v-if="step < 4"
-        :disabled="step === 4"
+        :disabled="step === 3"
         color="primary"
         depressed
         @click="step++"
@@ -171,10 +120,10 @@
         Next
       </v-btn>
       <v-btn
-        v-if="step === 4"
+        v-if="step === 3"
         class="green"
         dark
-        @click="postLapak"
+        @click="submitlapak"
       >
         Submit
       </v-btn>
@@ -204,37 +153,20 @@ export default {
         'Tersedia',
         'Tidak tersedia'
       ],
-      lapaks: [
-        {
-          nama_penyedia: '',
-          alamat: '',
-          kecamatan: '',
-          LokasiId: '',
-          Posts: {
-            judul_post: '',
-            deskripsi_umum: '',
-            status_post: '',
-            perjam: '',
-            perhari: '',
-            perbulan: '',
-            pertahun: '',
-            titik: {
-              type: '',
-              coordinates: []
-            },
-            alamat: '',
-            kecamatan: '',
-            KategoriId: '',
-            LokasiId: '',
-            Fotoposts: [],
-            Fasilitas: [
-              {
-                nama_fasilitas: ''
-              }
-            ]
-          }
+      lapak: {
+        nama_penyedia: '',
+        alamat: '',
+        Posts: {
+          judul_post: '',
+          deskripsi_umum: '',
+          status_post: '',
+          perjam: '',
+          perhari: '',
+          perbulan: '',
+          pertahun: '',
+          alamat: ''
         }
-      ]
+      }
     }
   },
   computed: {
@@ -249,7 +181,23 @@ export default {
     }
   },
   methods: {
-
+    submitlapak () {
+      this.$store.dispatch('submitLapak', {
+        nama_penyedia: this.lapak.nama_penyedia,
+        alamat_lapak: this.lapak.alamat,
+        judul_lapak: this.lapak.Posts.judul_post,
+        deskripsi: this.lapak.Posts.deskripsi_umum,
+        status_lapak: this.lapak.Posts.status_post,
+        perjam: this.lapak.Posts.perjam,
+        perhari: this.lapak.Posts.perhari,
+        perbulan: this.lapak.Posts.perbulan,
+        pertahun: this.lapak.Posts.pertahun,
+        alamat_penyedia: this.lapak.Posts.alamat
+      })
+        .then((resp) => {
+          console.log(resp)
+        })
+    }
   }
 }
 </script>

@@ -2,12 +2,12 @@ import API from '@/services/APIService'
 
 export default {
   index () {
-    return API().get('posts')
+    return API().get('post')
   },
   posting (lapak) {
     return API().post('post', lapak)
   },
-  show (lapakId) {
-    return API().get(`posts/${lapakId}`)
+  show (id) {
+    return API().get(`post/${id}`)
   }
 }
