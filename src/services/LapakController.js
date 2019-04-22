@@ -9,5 +9,11 @@ export default {
   },
   show (id) {
     return API().get(`post/${id}`)
+  },
+  delete (id) {
+    return API().delete(`post/${id}`)
+  },
+  update (id) {
+    return API().post(`post/${id}`)
   }
 }

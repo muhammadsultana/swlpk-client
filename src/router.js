@@ -1,5 +1,4 @@
 import Vue from 'vue'
-// import Store from './store'
 import Router from 'vue-router'
 import Home from '@/Homepage'
 import Admin from './views/Admin.vue'
@@ -8,12 +7,13 @@ import Detail from './views/DetailLapak.vue'
 import SearchResult from './components/SearchResult.vue'
 import TambahLapak from './components/TambahLapak.vue'
 import MyAccount from './views/MyAccount.vue'
+import EditProfile from './views/EditProfile.vue'
 
 Vue.use(Router)
 
 // Router.beforeEach((to, from, next) => {
 //   if (to.matched.some(record => record.meta.requiresAuth)) {
-//     if (Store.getters.isUserLoggedIn) {
+//     if (Store.getters.isLoggedIn) {
 //       next()
 //       return
 //     }
@@ -55,12 +55,23 @@ export default new Router({
     {
       path: '/tambah-lapak',
       name: 'TambahLapak',
-      component: TambahLapak
+      component: TambahLapak,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/myaccount',
       name: 'myaccount',
       component: MyAccount,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/myaccount/:userid',
+      name: 'editprofile',
+      component: EditProfile,
       meta: {
         requiresAuth: true
       }

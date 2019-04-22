@@ -23,13 +23,16 @@
                 ></v-text-field>
             </v-flex>
             <v-flex xs12 md2>
-              <v-select
+              <!-- <v-select
               flat
               :items="items"
               class="pt-2 pl-2 pr-2"
               label="Kategori"
               solo
-              ></v-select>
+              ></v-select> -->
+              <select class="form-control custom-select">
+                <option v-for="item in items" v-bind:key="item.id">{{ item.nama_kategori }}</option>
+              </select>
             </v-flex>
             <v-flex xs12 md3>
               <v-layout class="pb-4" align-center justify-center>
@@ -43,6 +46,7 @@
   </v-layout>
   <swiper />
   <Kota />
+  <Footer />
       <!-- dialog -->
       <v-dialog
       v-model="dialog"
@@ -99,7 +103,9 @@
 <script>
 import swiperLapak from '@/components/SwiperLapak'
 import Kota from '@/components/Kota'
+import footer from '@/components/Footer'
 import LapakController from '@/services/LapakController'
+import KategoriController from '@/services/KategoriController'
 
 export default {
   data () {
@@ -118,18 +124,26 @@ export default {
         { text: '0%' }
       ],
       dialog: false,
-      items: [
-        'Alfamart', 'Indomaret', 'Bazaar'
-      ],
+      items: [],
       post: null
     }
   },
   components: {
     'swiper': swiperLapak,
-    Kota
+    Kota,
+    footer
   },
   async mounted () {
-    this.post = (await LapakController).data
+    KategoriController.index()
+      .then((resp) => {
+        const name = Object.values(resp.data)
+        this.items = name
+      })
+
+    LapakController.index()
+      .then((resp) => {
+        console.log(resp.data)
+      })
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div id="myAccount">
+  <div>
     <v-layout row>
       <v-flex xs12>
         <v-card flat max-height>
@@ -7,13 +7,12 @@
             max-width
             height="120"
             src="http://sewalapak.id/wp-content/uploads/2018/12/page-my-accountfeatured-image.jpg">
-            <h1 class="display-3 font-weight-medium white--text mt-4">My Account</h1>
+            <h1 class="display-3 font-weight-medium white--text mt-4">Update Profile</h1>
             </v-img>
         </v-card>
       </v-flex>
     </v-layout>
-
-    <v-container grid-list-xl>
+      <v-container grid-list-xl>
         <v-flex xs12>
           <v-card>
             <v-layout row>
@@ -36,21 +35,15 @@
                       <p class="text-xs-left">No. WhatsApp</p>
                     </v-flex>
                     <v-flex xs12 md9>
-                      <p class="text-xs-left">{{ user.lastname }}</p>
-                      <p class="text-xs-left">{{ user.email }}</p>
-                      <p class="text-xs-left">{{ user.no_hp }}</p>
-                      <p class="text-xs-left">{{ user.wa }}</p>
+                      <p><input type="text" v-model="profile.firstname"><input type="text" v-model="profile.lastname"></p>
+                      <p><input type="text" v-model="profile.email"></p>
+                      <p><input type="text" v-model="profile.no_hp"></p>
+                      <p><input type="text" v-model="profile.wa"></p>
                     </v-flex>
                   </v-layout>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn @click="navigateTo(
-                    {
-                      name: 'editprofile',
-                      params: {
-                        userid: user.id
-                      }
-                    })" class="blue" dark>Perbarui data</v-btn>
+                  <v-btn @click="update_profile(profile)" class="blue" dark>Update</v-btn>
                 </v-card-actions>
               </v-flex>
             </v-layout>
@@ -61,22 +54,41 @@
 </template>
 
 <script>
+// import Controller from '@/services/Controller'
+import axios from 'axios'
 
 export default {
-  name: 'myAccount',
-  methods: {
-    navigateTo (route) {
-      this.$router.push(route)
+  data () {
+    return {
+      profile: {}
     }
   },
-  computed: {
-    user () {
-      return this.$store.getters.user
+  created () {
+    this.profile = this.$store.getters.user
+  },
+  methods: {
+    update_profile (profile) {
+      let data = {
+        firstname: this.profile.firstname,
+        lastname: this.profile.lastname,
+        email: this.profile.email,
+        no_hp: this.profile.no_hp,
+        wa: this.profile.wa
+      }
+      // this.$store.dispatch('update_profile', this.$route.params.id)
+      axios.post(`http://localhost:8081/user/${profile.id}`, {
+        body: JSON.stringify(profile),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((resp) => {
+        console.log(data)
+        console.log(resp)
+      }).catch((err) => {
+        console.log(err)
+      })
     }
   }
 }
 </script>
-
-<style>
-
-</style>

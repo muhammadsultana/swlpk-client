@@ -6,5 +6,8 @@ export default {
   },
   login (credentials) {
     return API().post('login', credentials)
+  },
+  update (id) {
+    return API().post(`user/${id}`)
   }
 }

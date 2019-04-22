@@ -46,9 +46,9 @@
                     <div class="swiper-lazy-preloader"></div>
                     <v-card-title>
                   <div>
-                    <p class="title">{{ post.title }}</p>
+                    <p class="title">{{ post.judul_post }}</p>
                     <span class="red--text">Rp10.000.000</span><br>
-                    <span>Jl. Palembang Prabumulih</span><br>
+                    <span>{{ post.Lokasi.kota }}, {{ post.Lokasi.provinsi }}</span><br>
                     <span class="caption"><v-icon>done</v-icon>Tersedia</span>
                   </div>
                 </v-card-title>

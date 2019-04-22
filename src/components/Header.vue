@@ -21,17 +21,24 @@
             </v-btn>
 
             <v-btn flat dark
-            @click="logout()"
-            v-if="isUserLoggedIn"
-            >
-            Logout
-            </v-btn>
-
-            <v-btn flat dark
             @click ="navigateTo({name: 'TambahLapak'})"
             v-if="isUserLoggedIn"
             >
             Tambah Lapak
+            </v-btn>
+
+            <v-btn flat dark
+            @click ="navigateTo({name: 'myaccount'})"
+            v-if="isUserLoggedIn"
+            >
+            Akun
+            </v-btn>
+
+            <v-btn flat dark
+            @click="logout()"
+            v-if="isUserLoggedIn"
+            >
+            Logout
             </v-btn>
 
             <v-dialog
@@ -152,7 +159,12 @@
                             :mask="'####-####-#######'"
                             v-model="user.no_hp"
                             label="Nomor Handphone"
-                            id="he"></v-text-field>
+                            ></v-text-field>
+                            <v-text-field
+                            :mask="'####-####-#######'"
+                            v-model="user.wa"
+                            label="Nomor WhatsApp"
+                            ></v-text-field>
                             <v-btn
                             class="green"
                             @click="register">Register</v-btn> <br>
