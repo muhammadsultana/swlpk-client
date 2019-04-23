@@ -75,19 +75,13 @@ export default {
         no_hp: this.profile.no_hp,
         wa: this.profile.wa
       }
-      // this.$store.dispatch('update_profile', this.$route.params.id)
       axios.post(`http://localhost:8081/user/${profile.id}`, {
-        body: JSON.stringify(profile),
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((resp) => {
-        console.log(data)
-        console.log(resp)
-      }).catch((err) => {
-        console.log(err)
+        data
       })
+        .then((resp) => {
+          console.log(data)
+          console.log(profile.id)
+        })
     }
   }
 }

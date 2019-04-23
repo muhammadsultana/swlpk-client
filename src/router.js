@@ -8,6 +8,8 @@ import SearchResult from './components/SearchResult.vue'
 import TambahLapak from './components/TambahLapak.vue'
 import MyAccount from './views/MyAccount.vue'
 import EditProfile from './views/EditProfile.vue'
+import ListLapak from './views/ListLapak.vue'
+import ListLapakEdit from './views/ListLapakEdit.vue'
 
 Vue.use(Router)
 
@@ -72,6 +74,22 @@ export default new Router({
       path: '/myaccount/:userid',
       name: 'editprofile',
       component: EditProfile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/list-lapak',
+      name: 'listlapak',
+      component: ListLapak,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/lapak-edit/:lapakId',
+      name: 'editlapak',
+      component: ListLapakEdit,
       meta: {
         requiresAuth: true
       }

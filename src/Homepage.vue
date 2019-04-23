@@ -23,13 +23,6 @@
                 ></v-text-field>
             </v-flex>
             <v-flex xs12 md2>
-              <!-- <v-select
-              flat
-              :items="items"
-              class="pt-2 pl-2 pr-2"
-              label="Kategori"
-              solo
-              ></v-select> -->
               <select class="form-control custom-select">
                 <option v-for="item in items" v-bind:key="item.id">{{ item.nama_kategori }}</option>
               </select>

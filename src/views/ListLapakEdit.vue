@@ -7,7 +7,7 @@
           max-width
           height="200"
           src="http://sewalapak.id/wp-content/uploads/2018/12/page-my-accountfeatured-image.jpg">
-          <h1 class="display-3 font-weight-medium white--text mt-4">Tambah Lapak</h1>
+          <h1 class="display-3 font-weight-medium white--text mt-4">Update Lapak</h1>
           </v-img>
       </v-card>
     </v-flex>
@@ -33,42 +33,41 @@
         <v-card-text>
           <v-text-field
             label="Nama Lapak"
-            v-model="lapak.Posts.judul_post"
+            v-model="lapak.judul_post"
           ></v-text-field>
           <span class="title">Harga</span>
           <v-layout row>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Jam"
-              v-model="lapak.Posts.perjam"
+              v-model="lapak.perjam"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Hari"
-              v-model="lapak.Posts.perhari"
+              v-model="lapak.perhari"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Bulan"
-              v-model="lapak.Posts.perbulan"
+              v-model="lapak.perbulan"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
             <v-flex xs12 md3>
               <v-text-field
               label="Per Tahun"
-              v-model="lapak.Posts.pertahun"
+              v-model="lapak.pertahun"
               prepend-icon="attach_money"
               ></v-text-field>
             </v-flex>
           </v-layout>
           <v-text-field
           label="Alamat lapak"
-          v-model="lapak.alamat"
           ></v-text-field>
         </v-card-text>
       </v-window-item>
@@ -79,8 +78,8 @@
           name="input-7-1"
           solo
           label="Deskripsi"
-          v-model="lapak.Posts.deskripsi_umum"
           auto-grow
+          v-model="lapak.deskripsi_umum"
           ></v-textarea>
         </v-container>
       </v-window-item>
@@ -89,12 +88,12 @@
         <v-card-text>
           <v-text-field
             label="Nama Penyedia"
-            v-model="lapak.nama_penyedia"
+            v-model="lapak.Penyedium.nama_penyedia"
           ></v-text-field>
           <v-text-field
             label="Alamat Penyedia"
-            v-model="lapak.Posts.alamat">
-          </v-text-field>
+            v-model="lapak.Penyedium.alamat"
+          ></v-text-field>
         </v-card-text>
       </v-window-item>
     </v-window>
@@ -135,12 +134,12 @@
 </template>
 
 <script>
-// import LapakController from '@/services/LapakController'
-import axios from 'axios'
+import LapakController from '@/services/LapakController'
 
 export default {
   data () {
     return {
+      id: this.$route.params.lapakId,
       step: 1,
       option: [
         'hehe',
@@ -181,23 +180,19 @@ export default {
       return this.step
     }
   },
+  created () {
+    this.getOneLapak()
+  },
   methods: {
-    submitlapak () {
-      axios.post(`http://localhost:8081/post`, {
-        nama_penyedia: this.lapak.nama_penyedia,
-        alamat_lapak: this.lapak.alamat,
-        judul_lapak: this.lapak.Posts.judul_post,
-        deskripsi: this.lapak.Posts.deskripsi_umum,
-        status_lapak: this.lapak.Posts.status_post,
-        perjam: this.lapak.Posts.perjam,
-        perhari: this.lapak.Posts.perhari,
-        perbulan: this.lapak.Posts.perbulan,
-        pertahun: this.lapak.Posts.pertahun,
-        alamat_penyedia: this.lapak.Posts.alamat
-      })
-        .then((resp) => {
-          console.log(resp)
-        })
+    getOneLapak () {
+      try {
+        LapakController.show(this.id)
+          .then((resp) => {
+            this.lapak = resp.data
+          })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

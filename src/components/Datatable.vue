@@ -1,8 +1,8 @@
 <template>
   <div>
-    <slot name="dataadmin">
+    <slot name="listlapak">
       <v-toolbar flat color="white">
-        <v-toolbar-title>My CRUD</v-toolbar-title>
+        <v-toolbar-title>List Lapak</v-toolbar-title>
         <v-divider
           class="mx-2"
           inset
@@ -48,15 +48,15 @@
       </v-toolbar>
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="lapak"
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">{{ props.item.calories }}</td>
-          <td class="text-xs-right">{{ props.item.fat }}</td>
-          <td class="text-xs-right">{{ props.item.carbs }}</td>
-          <td class="text-xs-right">{{ props.item.protein }}</td>
+          <td>{{ props.item.judul_post }}</td>
+          <td class="text-xs-center">{{ props.item.deskripsi_umum }}</td>
+          <td class="text-xs-center">{{ props.item.perbulan }}</td>
+          <td class="text-xs-center">{{ props.item.Penyedium.nama_penyedia }}</td>
+          <td class="text-xs-center">{{ props.item.Lokasi.kota }}</td>
           <td class="justify-center layout px-0">
             <v-icon
               small
@@ -64,6 +64,17 @@
               @click="editItem(props.item)"
             >
               edit
+            </v-icon>
+            <v-icon
+              small
+              class="mr-2"
+              @click="update_lapak({
+                name: 'editlapak',
+                params: {
+                  lapakId: props.item.id
+                }
+              })">
+              update
             </v-icon>
             <v-icon
               small
@@ -82,22 +93,25 @@
 </template>
 
 <script>
+import LapakController from '@/services/LapakController'
+
 export default {
   data: () => ({
     dialog: false,
     headers: [
       {
-        text: 'Dessert (100g serving)',
-        align: 'left',
+        text: 'Judul post',
+        align: 'center',
         sortable: false,
         value: 'name'
       },
-      { text: 'Calories', value: 'calories' },
-      { text: 'Fat (g)', value: 'fat' },
-      { text: 'Carbs (g)', value: 'carbs' },
-      { text: 'Protein (g)', value: 'protein' },
+      { text: 'Deskripsi Umum', value: 'lapak' },
+      { text: 'Harga per bulan', value: 'fat' },
+      { text: 'Nama Penyedia', value: 'carbs' },
+      { text: 'Kota', value: 'protein' },
       { text: 'Actions', value: 'name', sortable: false }
     ],
+    lapak: [],
     desserts: [],
     editedIndex: -1,
     editedItem: {
@@ -130,14 +144,34 @@ export default {
 
   created () {
     this.initialize()
+    this.getLapak()
   },
 
   methods: {
+    update_lapak (route) {
+      this.$router.push(route)
+    },
+    getLapak () {
+      try {
+        LapakController.index()
+          .then((resp) => {
+            this.lapak = resp.data
+            console.log(resp.data)
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
     initialize () {
+      this.lapak = [
+        {
+          lapak: this.lapak.judul_post
+        }
+      ]
       this.desserts = [
         {
           name: 'Frozen Yogurt',
-          calories: 159,
+          lapak: 159,
           fat: 6.0,
           carbs: 24,
           protein: 4.0

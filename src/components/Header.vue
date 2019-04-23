@@ -193,12 +193,15 @@ export default {
       checkbox: false,
       hidden: false,
       error: '',
+      role: [
+        'Admin', 'Super Admin'
+      ],
       user: [
         {
           firstname: '',
           lastname: '',
           username: '',
-          role: '',
+          role: 'user',
           email: '',
           password: '',
           wa: '',

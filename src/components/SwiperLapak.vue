@@ -121,10 +121,16 @@ export default {
     },
     async swiperOptions () {
       return this.$options.swiperOption
+    },
+    fetchData () {
+      LapakController.index()
+        .then((resp) => {
+          this.posts = resp.data
+        })
     }
   },
   async mounted () {
-    this.posts = (await LapakController.index()).data
+    this.posts = await this.fetchData()
   }
 }
 </script>

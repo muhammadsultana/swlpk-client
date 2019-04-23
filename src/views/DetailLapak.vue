@@ -13,7 +13,7 @@
     </v-flex>
 
     <v-container fluid>
-      <h2 class="text-xs-left">{{ lapak.title }}</h2>
+      <h2 class="text-xs-left">{{ lapak.judul_post }}</h2>
       <v-divider></v-divider>
     </v-container>
 
@@ -36,7 +36,7 @@
                       <v-icon color="indigo">phone</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                      <v-list-tile-title>(650) 555-1234</v-list-tile-title>
+                      <v-list-tile-title>{{ lapak.no_hp }}</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
@@ -52,6 +52,7 @@
                       <v-icon color="indigo">directions</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
+                      <v-list-tile-title>{{ lapak.alamat }}</v-list-tile-title>
                       <v-list-tile-title>Get Directions</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
@@ -69,7 +70,7 @@
             <v-card-media>
               <v-window
               max>
-              Hello
+              {{ lapak.deskripsi_umum }}
               </v-window>
             </v-card-media>
           </v-card>
@@ -142,6 +143,7 @@ export default {
   },
   data () {
     return {
+      id: this.$route.params.lapakId,
       lapak: {},
       images: [
         {
@@ -159,16 +161,10 @@ export default {
       ]
     }
   },
-  methods: {
-    fetchLapak () {
-      LapakController.show().then((resp) => {
-        this.lapak = resp.data
-        console.log(resp)
-      })
-    }
-  },
   created: function () {
-    this.fetchLapak()
+    LapakController.show(this.id).then((resp) => {
+      this.lapak = resp.data
+    })
   }
 }
 </script>
