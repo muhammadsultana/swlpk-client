@@ -29,21 +29,33 @@
                 <v-card-text>
                   <v-layout row>
                     <v-flex xs12 md3>
-                      <p class="text-xs-left">Nama</p>
+                      <p class="text-xs-left">Nama Depan</p>
+                      <p class="text-xs-left">Nama Belakang</p>
                       <p class="text-xs-left">Email</p>
                       <p class="text-xs-left">No. Handphone</p>
                       <p class="text-xs-left">No. WhatsApp</p>
+                      <p class="text-xs-left" v-if="user.role == 'Operator'">Role</p>
+                      <p class="text-xs-left">Username</p>
                     </v-flex>
                     <v-flex xs12 md9>
-                      <p><input type="text" v-model="profile.firstname"><input type="text" v-model="profile.lastname"></p>
-                      <p><input type="text" v-model="profile.email"></p>
-                      <p><input type="text" v-model="profile.no_hp"></p>
-                      <p><input type="text" v-model="profile.wa"></p>
+                      <div class="form-group">
+                        <input type="text" class="form-control" v-model="profile.firstname">
+                        <input type="text" class="form-control" v-model="profile.lastname">
+                        <input type="text" class="form-control" v-model="profile.email">
+                        <input type="text" class="form-control" v-model="profile.no_hp">
+                        <input type="text" class="form-control" v-model="profile.wa">
+                        <b-form-select v-if="user.role == 'Operator'" v-model="profile.role">
+                          <option class="form-control" v-for="role in roles" v-bind:key="role.id" v-bind:value="role.value">
+                            {{ role.value }}
+                          </option>
+                        </b-form-select>
+                        <input type="text" class="form-control" v-model="profile.username">
+                      </div>
                     </v-flex>
                   </v-layout>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn @click="update_profile(profile)" class="blue" dark>Update</v-btn>
+                  <v-btn @click="update_profile(profile)" class="blue" dark>Updates</v-btn>
                 </v-card-actions>
               </v-flex>
             </v-layout>
@@ -54,34 +66,60 @@
 </template>
 
 <script>
-// import Controller from '@/services/Controller'
+import UserController from '@/services/UserController'
 import axios from 'axios'
 
 export default {
   data () {
     return {
-      profile: {}
+      id: this.$route.params.userid,
+      profile: {},
+      roles: [
+        { id: '1', value: 'Admin' },
+        { id: '2', value: 'Operator' },
+        { id: '3', value: 'User' }
+      ]
     }
   },
   created () {
-    this.profile = this.$store.getters.user
+    this.get_profile()
+  },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    }
   },
   methods: {
-    update_profile (profile) {
-      let data = {
-        firstname: this.profile.firstname,
-        lastname: this.profile.lastname,
-        email: this.profile.email,
-        no_hp: this.profile.no_hp,
-        wa: this.profile.wa
+    get_profile () {
+      try {
+        UserController.show(this.id)
+          .then((resp) => {
+            this.profile = resp.data
+          })
+      } catch (e) {
+        console.log(e)
       }
-      axios.post(`http://localhost:8081/user/${profile.id}`, {
-        data
-      })
-        .then((resp) => {
-          console.log(data)
-          console.log(profile.id)
+    },
+    update_profile (profile) {
+      try {
+        axios.put(`http://localhost:8081/user/${profile.id}`, {
+          firstname: profile.firstname,
+          lastname: profile.lastname,
+          email: profile.email,
+          no_hp: profile.no_hp,
+          role: profile.role,
+          wa: profile.wa,
+          username: profile.username
         })
+          .then((resp) => {
+            this.$swal('Edited', 'Profile has been edited.', 'success')
+              .then(() => {
+                this.$router.push('/list-user')
+              })
+          })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }

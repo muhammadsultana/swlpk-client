@@ -34,12 +34,14 @@
                       <p class="text-xs-left">Email</p>
                       <p class="text-xs-left">No. Handphone</p>
                       <p class="text-xs-left">No. WhatsApp</p>
+                      <p v-if="profile.username" class="text-xs-left">Username</p>
                     </v-flex>
                     <v-flex xs12 md9>
-                      <p class="text-xs-left">{{ user.lastname }}</p>
-                      <p class="text-xs-left">{{ user.email }}</p>
-                      <p class="text-xs-left">{{ user.no_hp }}</p>
-                      <p class="text-xs-left">{{ user.wa }}</p>
+                      <p class="text-xs-left">{{ profile.firstname }} {{ profile.lastname }}</p>
+                      <p class="text-xs-left">{{ profile.email }}</p>
+                      <p class="text-xs-left">{{ profile.no_hp }}</p>
+                      <p class="text-xs-left">{{ profile.wa }}</p>
+                      <p class="text-xs-left">{{ profile.username }}</p>
                     </v-flex>
                   </v-layout>
                 </v-card-text>
@@ -48,7 +50,7 @@
                     {
                       name: 'editprofile',
                       params: {
-                        userid: user.id
+                        userid: profile.id
                       }
                     })" class="blue" dark>Perbarui data</v-btn>
                 </v-card-actions>
@@ -61,10 +63,30 @@
 </template>
 
 <script>
+import UserController from '@/services/UserController'
 
 export default {
+  data () {
+    return {
+      id: this.$store.getters.user.id,
+      profile: {}
+    }
+  },
   name: 'myAccount',
+  created () {
+    this.get_profile()
+  },
   methods: {
+    get_profile () {
+      try {
+        UserController.show(this.id)
+          .then((resp) => {
+            this.profile = resp.data
+          })
+      } catch (e) {
+        console.log(e)
+      }
+    },
     navigateTo (route) {
       this.$router.push(route)
     }

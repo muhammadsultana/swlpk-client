@@ -19,17 +19,24 @@
                 label="Provinsi dan Kota"
                 append-icon="place"
                 full-width
-                @click="dialog = true"
+                v-model="search"
                 ></v-text-field>
             </v-flex>
             <v-flex xs12 md2>
-              <select class="form-control custom-select">
-                <option v-for="item in items" v-bind:key="item.id">{{ item.nama_kategori }}</option>
-              </select>
+              <v-select
+              :items="kategori"
+              name="kategori"
+              v-model="category"
+              item-text="nama_kategori"
+              item-value="value"
+              class="pt-2 pl-2 pr-2"
+              label="Kategori"
+              solo
+              ></v-select>
             </v-flex>
             <v-flex xs12 md3>
               <v-layout class="pb-4" align-center justify-center>
-                <v-btn round class="orange" large><v-icon>search</v-icon>Cari</v-btn>
+                <v-btn round class="orange" @click="search()" large><v-icon>search</v-icon>Cari</v-btn>
               </v-layout>
             </v-flex>
           </v-layout>
@@ -117,7 +124,8 @@ export default {
         { text: '0%' }
       ],
       dialog: false,
-      items: [],
+      kategori: [],
+      category: [],
       post: null
     }
   },
@@ -130,7 +138,7 @@ export default {
     KategoriController.index()
       .then((resp) => {
         const name = Object.values(resp.data)
-        this.items = name
+        this.kategori = name
       })
 
     LapakController.index()

@@ -25,10 +25,33 @@
               <div class="title"><v-icon>details</v-icon> Detail lapak</div>
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-media>
+            <v-responsive>
               <v-layout row>
                 <v-flex xs6 md5>
-                  peta
+                  <v-list-tile>
+                    <v-list-tile-action>
+                      <v-icon color="indigo">money</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Harga bulanan: Rp{{ lapak.perbulan }}</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-action>
+                      <v-icon color="indigo">person</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Pemilik: {{ lapak.Penyedium.nama_penyedia }}</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile>
+                    <v-list-tile-action>
+                      <v-icon color="indigo">person</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Fasilitas: {{ Object.keys(lapak.Fasilitas) }}</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
                 </v-flex>
                 <v-flex xs6 md7>
                   <v-list-tile>
@@ -52,13 +75,12 @@
                       <v-icon color="indigo">directions</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                      <v-list-tile-title>{{ lapak.alamat }}</v-list-tile-title>
-                      <v-list-tile-title>Get Directions</v-list-tile-title>
+                      <v-list-tile-title>{{ lapak.Lokasi.kota}}, {{ lapak.Lokasi.provinsi}}</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
                 </v-flex>
               </v-layout>
-            </v-card-media>
+            </v-responsive>
           </v-card>
         </v-flex>
         <v-flex xs12 md5>
@@ -67,24 +89,24 @@
               <div class="title"><v-icon>description</v-icon> Deskripsi</div>
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-media>
+            <v-responsive>
               <v-window
               max>
               {{ lapak.deskripsi_umum }}
               </v-window>
-            </v-card-media>
+            </v-responsive>
           </v-card>
         </v-flex>
       </v-layout>
 
-            <v-layout row>
+      <v-layout row>
         <v-flex xs12 md7>
           <v-card>
             <v-card-title>
               <div class="title"><v-icon>rate_review</v-icon> Rate and Write a review</div>
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-media>
+            <v-responsive>
               <v-layout row>
                 <v-flex xs12 md12>
                   <v-container>
@@ -108,25 +130,25 @@
                   </v-container>
                 </v-flex>
               </v-layout>
-            </v-card-media>
+            </v-responsive>
           </v-card>
         </v-flex>
-        <v-flex xs12 md5>
+        <!-- <v-flex xs12 md5>
           <v-card>
             <v-card-title>
               {{ lapak }}
               <div class="title"><v-icon>photos</v-icon> Photos</div>
             </v-card-title>
             <v-divider></v-divider>
-            <v-card-media>
+            <v-responsive>
               <v-img>
                 <img src="http://sewalapak.id/wp-content/uploads/job-manager-uploads/gallery_images/2018/12/photo_2018-12-28_07-59-30.jpg" alt=""
                 width="100px"
                 height="100px">
               </v-img>
-            </v-card-media>
+            </v-responsive>
           </v-card>
-        </v-flex>
+        </v-flex> -->
       </v-layout>
     </v-container>
     <Footer />
@@ -147,16 +169,7 @@ export default {
       lapak: {},
       images: [
         {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-        },
-        {
-          src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
+          src: 'http://cdn2.tstatic.net/solo/foto/bank/images/alfamart-di-flipina_20160810_170637.jpg'
         }
       ]
     }
@@ -164,6 +177,7 @@ export default {
   created: function () {
     LapakController.show(this.id).then((resp) => {
       this.lapak = resp.data
+      console.log(this.lapak)
     })
   }
 }

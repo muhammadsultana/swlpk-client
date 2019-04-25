@@ -4,7 +4,7 @@ export default {
   index () {
     return API().get('post')
   },
-  posting (lapak) {
+  register_lapak (lapak) {
     return API().post('post', lapak)
   },
   show (id) {
@@ -14,6 +14,9 @@ export default {
     return API().delete(`post/${id}`)
   },
   update (id) {
-    return API().post(`post/${id}`)
+    return API().put(`post/${id}`)
+  },
+  search (id) {
+    return API().post()
   }
 }

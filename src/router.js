@@ -9,6 +9,8 @@ import TambahLapak from './components/TambahLapak.vue'
 import MyAccount from './views/MyAccount.vue'
 import EditProfile from './views/EditProfile.vue'
 import ListLapak from './views/ListLapak.vue'
+import RegisterUser from './views/RegisterUser.vue'
+import ListUser from './views/ListUser.vue'
 import ListLapakEdit from './views/ListLapakEdit.vue'
 
 Vue.use(Router)
@@ -77,6 +79,19 @@ export default new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/list-user',
+      name: 'listuser',
+      component: ListUser,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/register',
+      name: 'registeruser',
+      component: RegisterUser
     },
     {
       path: '/list-lapak',

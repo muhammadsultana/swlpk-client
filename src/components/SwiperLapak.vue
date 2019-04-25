@@ -3,8 +3,8 @@
     <v-container>
       <v-layout row>
         <v-flex xs12 md4>
-          <h4>Saran lapak untuk Anda</h4>
-            <v-select
+          <h4>Lapak baru-baru ini</h4>
+            <!-- <v-select
             v-model="kota"
             :items="cities"
             item-text="name"
@@ -12,7 +12,8 @@
             class="pt-2 pl-2 pr-2"
             label="Kategori"
             solo
-            ></v-select>
+            ></v-select> -->
+            <input type="text" v-model="search" class="form-control" id="search" placeholder="Filter lapak">
             <span>{{ kota }}</span>
         </v-flex>
       </v-layout>
@@ -26,7 +27,7 @@
               class="swiper-container swiper-wrapper">
                 <!-- slide -->
                 <swiper-slide
-                 v-for="post of posts.slice(0,10)"
+                 v-for="post of filteredLapak.slice(0,10)"
                   :key="post.id">
                   <div>
                   <v-card
@@ -47,7 +48,7 @@
                     <v-card-title>
                   <div>
                     <p class="title">{{ post.judul_post }}</p>
-                    <span class="red--text">Rp10.000.000</span><br>
+                    <span class="red--text">Bulanan: Rp{{ post.perbulan }}</span><br>
                     <span>{{ post.Lokasi.kota }}, {{ post.Lokasi.provinsi }}</span><br>
                     <span class="caption"><v-icon>done</v-icon>Tersedia</span>
                   </div>
@@ -79,8 +80,6 @@ export default {
         spaceBetween: 30,
         slidesPerGroup: 3,
         loop: false,
-        preloadImages: false,
-        lazy: true,
         breakpoints: {
         // when window width is <= 320px
           600: {
@@ -99,7 +98,7 @@ export default {
             slidesPerGroup: 3
           }
         },
-        loopFillGroupWithBlank: true,
+        loopFillGroupWithBlank: false,
         pagination: {
           el: '.swiper-pagination',
           clickable: true
@@ -112,7 +111,15 @@ export default {
       cities: [
         'Jakarta', 'Bogor', 'Aceh'
       ],
-      posts: []
+      posts: [],
+      search: ''
+    }
+  },
+  computed: {
+    filteredLapak () {
+      return this.posts.filter((post) => {
+        return post.judul_post.match(this.search)
+      })
     }
   },
   methods: {
@@ -129,8 +136,8 @@ export default {
         })
     }
   },
-  async mounted () {
-    this.posts = await this.fetchData()
+  mounted () {
+    this.posts = this.fetchData()
   }
 }
 </script>

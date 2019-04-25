@@ -3,6 +3,7 @@ import User from './User.vue'
 import router from './router'
 import store from './store'
 import Vuetify from 'vuetify'
+import VueSweetalert2 from 'vue-sweetalert2'
 import BootstrapVue from 'bootstrap-vue'
 import { sync } from 'vuex-router-sync'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
@@ -23,6 +24,7 @@ if (token) {
 Vue.use(BootstrapVue)
 Vue.use(axios)
 Vue.use(VueAwesomeSwiper)
+Vue.use(VueSweetalert2)
 Vue.config.productionTip = false
 Vue.use(Vuetify, {
   iconfont: 'mdi'

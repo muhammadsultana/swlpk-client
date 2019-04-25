@@ -6,7 +6,7 @@
         <v-img
           max-width
           height="200"
-          src="http://sewalapak.id/wp-content/uploads/2018/12/page-my-accountfeatured-image.jpg">
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Mon_Ami_Boulangerie_%288119944759%29.jpg">
           <h1 class="display-3 font-weight-medium white--text mt-4">Update Lapak</h1>
           </v-img>
       </v-card>
@@ -68,6 +68,7 @@
           </v-layout>
           <v-text-field
           label="Alamat lapak"
+          v-model="lapak.Penyedium.alamat"
           ></v-text-field>
         </v-card-text>
       </v-window-item>
@@ -75,7 +76,6 @@
       <v-window-item :value="2">
         <v-container>
           <v-textarea
-          name="input-7-1"
           solo
           label="Deskripsi"
           auto-grow
@@ -122,9 +122,9 @@
         v-if="step === 3"
         class="green"
         dark
-        @click="submitlapak"
+        @click="update_lapak(lapak)"
       >
-        Submit
+        Update
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -135,6 +135,7 @@
 
 <script>
 import LapakController from '@/services/LapakController'
+import axios from 'axios'
 
 export default {
   data () {
@@ -153,20 +154,7 @@ export default {
         'Tersedia',
         'Tidak tersedia'
       ],
-      lapak: {
-        nama_penyedia: '',
-        alamat: '',
-        Posts: {
-          judul_post: '',
-          deskripsi_umum: '',
-          status_post: '',
-          perjam: '',
-          perhari: '',
-          perbulan: '',
-          pertahun: '',
-          alamat: ''
-        }
-      }
+      lapak: {}
     }
   },
   computed: {
@@ -193,6 +181,23 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    update_lapak (lapak) {
+      axios.put(`http://localhost:8081/post/${lapak.id}`, {
+        nama_penyedia: lapak.Penyedium.nama_penyedia,
+        alamat: lapak.Penyedium.alamat,
+        judul_post: lapak.judul_post,
+        deskripsi_umum: lapak.deskripsi_umum,
+        status_post: lapak.status_post,
+        perjam: lapak.perjam,
+        perhari: lapak.perhari,
+        perbulan: lapak.perbulan,
+        pertahun: lapak.pertahun
+      })
+      this.$swal('Edited', 'Lapak edited successfully!', 'success')
+        .then(() => {
+          this.$router.push('/list-lapak')
+        })
     }
   }
 }

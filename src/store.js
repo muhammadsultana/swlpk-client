@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Controller from './services/Controller'
-import LapakController from './services/LapakController'
+// import LapakController from './services/LapakController'
 import axios from 'axios'
 
 Vue.use(Vuex)
@@ -34,11 +34,13 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    submitLapak ({ commit }, lapak) {
+    submit_lapak ({ commit }, lapak) {
       return new Promise((resolve, reject) => {
-        LapakController.posting(lapak)
+        axios.post('http://localhost:8081/post', { lapak })
           .then(resp => {
             const lapak = resp.data
+            console.log(resp)
+            console.log(lapak)
             commit('submit_success', lapak)
             resolve(resp)
           })
@@ -97,6 +99,7 @@ export default new Vuex.Store({
   getters: {
     isUserLoggedIn: state => !!state.token,
     authStatus: state => state.status,
-    user: state => state.user
+    user: state => state.user,
+    token: state => state.token
   }
 })

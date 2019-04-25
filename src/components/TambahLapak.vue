@@ -66,10 +66,16 @@
               ></v-text-field>
             </v-flex>
           </v-layout>
-          <v-text-field
-          label="Alamat lapak"
-          v-model="lapak.alamat"
-          ></v-text-field>
+          <v-select
+          :items="cat"
+          name="cat"
+          v-model="lapak.Posts.KategoriId"
+          item-text="nama_kategori"
+          item-value="id"
+          class="pt-2 pl-2 pr-2"
+          label="Kategori"
+          solo
+          ></v-select>
         </v-card-text>
       </v-window-item>
 
@@ -82,6 +88,16 @@
           v-model="lapak.Posts.deskripsi_umum"
           auto-grow
           ></v-textarea>
+          <v-select
+          :items="loc"
+          name="loc"
+          v-model="lapak.LokasiId"
+          item-text="kota"
+          item-value="id"
+          class="pt-2 pl-2 pr-2"
+          label="Lokasi"
+          solo
+          ></v-select>
         </v-container>
       </v-window-item>
 
@@ -136,7 +152,9 @@
 
 <script>
 // import LapakController from '@/services/LapakController'
-import axios from 'axios'
+import LokasiController from '@/services/LokasiController'
+import KategoriController from '@/services/KategoriController'
+// import axios from 'axios'
 
 export default {
   data () {
@@ -150,6 +168,8 @@ export default {
         'Ogan Ilir',
         'Ugun Ulur'
       ],
+      loc: [],
+      cat: [],
       status_post: [
         'Tersedia',
         'Tidak tersedia'
@@ -157,6 +177,7 @@ export default {
       lapak: {
         nama_penyedia: '',
         alamat: '',
+        LokasiId: '',
         Posts: {
           judul_post: '',
           deskripsi_umum: '',
@@ -165,7 +186,11 @@ export default {
           perhari: '',
           perbulan: '',
           pertahun: '',
-          alamat: ''
+          foto: '',
+          KategoriId: '',
+          Fasilitas: [
+            { nama_fasilitas: '' }
+          ]
         }
       }
     }
@@ -181,22 +206,67 @@ export default {
       return this.step
     }
   },
+  async mounted () {
+    await this.get_lokasi()
+    await this.get_kategori()
+  },
   methods: {
-    submitlapak () {
-      axios.post(`http://localhost:8081/post`, {
-        nama_penyedia: this.lapak.nama_penyedia,
-        alamat_lapak: this.lapak.alamat,
-        judul_lapak: this.lapak.Posts.judul_post,
-        deskripsi: this.lapak.Posts.deskripsi_umum,
-        status_lapak: this.lapak.Posts.status_post,
-        perjam: this.lapak.Posts.perjam,
-        perhari: this.lapak.Posts.perhari,
-        perbulan: this.lapak.Posts.perbulan,
-        pertahun: this.lapak.Posts.pertahun,
-        alamat_penyedia: this.lapak.Posts.alamat
-      })
+    get_kategori () {
+      KategoriController.index()
         .then((resp) => {
-          console.log(resp)
+          this.cat = resp.data
+        })
+    },
+    get_lokasi () {
+      LokasiController.index()
+        .then((resp) => {
+          this.loc = resp.data
+        })
+    },
+    submitlapak () {
+      // let lapak = {
+      //   nama_penyedia: this.lapak.nama_penyedia,
+      //   alamat: this.lapak.alamat,
+      //   kecamatan: this.lapak.kecamatan,
+      //   LokasiId: this.lapak.LokasiId,
+      //   judul_post: this.lapak.Posts.judul_post,
+      //   deskripsi_umum: this.lapak.Posts.deskripsi_umum,
+      //   status_lapak: this.lapak.Posts.status_post,
+      //   perjam: this.lapak.Posts.perjam,
+      //   perhari: this.lapak.Posts.perhari,
+      //   perbulan: this.lapak.Posts.perbulan,
+      //   pertahun: this.lapak.Posts.pertahun
+      // }
+      // LapakController.register_lapak(lapak)
+      //   .then((resp) => {
+      //     console.log(resp)
+      //   })
+
+      // this.$store.dispatch('submit_lapak', {
+      //   nama_penyedia: this.lapak.nama_penyedia,
+      //   alamat: this.lapak.alamat,
+      //   kecamatan: this.lapak.kecamatan,
+      //   LokasiId: this.lapak.LokasiId,
+      //   judul_post: this.lapak.Posts.judul_post,
+      //   deskripsi_umum: this.lapak.Posts.deskripsi_umum,
+      //   status_lapak: this.lapak.Posts.status_post,
+      //   perjam: this.lapak.Posts.perjam,
+      //   perhari: this.lapak.Posts.perhari,
+      //   perbulan: this.lapak.Posts.perbulan,
+      //   pertahun: this.lapak.Posts.pertahun
+      // })
+      //   .then((resp) => {
+      //     console.log(resp)
+      //   })
+
+      this.$http.post('http://localhost:8081/post/', this.lapak,
+        {
+          headers: {
+            'content-type': 'application/json'
+          }
+        })
+        .then(result => {
+          console.log(result.data)
         })
     }
   }

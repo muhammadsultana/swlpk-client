@@ -21,10 +21,17 @@
             </v-btn>
 
             <v-btn flat dark
-            @click ="navigateTo({name: 'TambahLapak'})"
+            @click ="navigateTo({name: 'listuser'})"
+            v-if="isUserLoggedIn && pengguna.role == 'Operator'"
+            >
+            Pengguna
+            </v-btn>
+
+            <v-btn flat dark
+            @click ="navigateTo({name: 'listlapak'})"
             v-if="isUserLoggedIn"
             >
-            Tambah Lapak
+            Daftar Lapak
             </v-btn>
 
             <v-btn flat dark
@@ -40,40 +47,6 @@
             >
             Logout
             </v-btn>
-
-            <v-dialog
-            v-model="dialog_success"
-            width="300">
-              <v-toolbar
-              class="blue"
-              flat dark>
-                <v-icon
-                color="red"
-                class="pr-2 pb-3"
-                @click="dialog_success = false"
-                >close
-                </v-icon>
-              </v-toolbar>
-              <v-card>
-                <v-container
-                  fluid
-                  grid-list-lg
-                >
-                  <v-layout row wrap>
-                    <v-flex xs12>
-                      <v-card color="blue-grey darken-2" class="white--text">
-                        <v-card-title primary-title>
-                          <div>
-                            <div class="headline text-md-center">You're logged in</div>
-                            <!-- <span>Listen to your favorite artists and albums whenever and wherever, online and offline.</span> -->
-                          </div>
-                        </v-card-title>
-                      </v-card>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-              </v-card>
-            </v-dialog>
             <v-dialog
             v-model="dialog"
             width="600"
@@ -156,6 +129,11 @@
                             type="password"
                             v-model="user.password"></v-text-field>
                             <v-text-field
+                            label="Role"
+                            prefix="User"
+                            type="text"
+                            disabled></v-text-field>
+                            <v-text-field
                             :mask="'####-####-#######'"
                             v-model="user.no_hp"
                             label="Nomor Handphone"
@@ -201,7 +179,7 @@ export default {
           firstname: '',
           lastname: '',
           username: '',
-          role: 'user',
+          role: 'User',
           email: '',
           password: '',
           wa: '',
@@ -222,8 +200,10 @@ export default {
       }
       this.$store.dispatch('login', data).then(() => {
         this.dialog = false
-        this.$router.push('/')
-        console.log('berhasil')
+        this.$swal('Logged in', 'You logged in successfully!', 'success')
+          .then(() => {
+            this.$router.push('/')
+          })
       }).catch(err => console.log(err))
     },
     register () {
@@ -236,20 +216,30 @@ export default {
         wa: this.user.wa,
         no_hp: this.user.no_hp
       }).then(() => {
-        this.dialog_success = true
         this.dialog = false
-        this.$router.push('/')
-        console.log('berhasil')
-      }).catch(err => console.log(err))
+        this.$swal('Signed up', 'You logged in automatically!', 'success')
+          .then(() => {
+            this.$router.push('/')
+          })
+      }).catch(err => {
+        this.$swal('Error', err.message, 'error')
+      })
     },
     logout () {
       this.$store.dispatch('logout')
+      this.$swal('Logged out', 'Thank you!', 'success')
+        .then(() => {
+          this.$router.push('/')
+        })
       this.$router.push('/')
     }
   },
   computed: {
     isUserLoggedIn () {
       return this.$store.getters.isUserLoggedIn
+    },
+    pengguna () {
+      return this.$store.getters.user
     }
   }
 }

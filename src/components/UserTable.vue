@@ -1,8 +1,8 @@
 <template>
   <div>
-    <slot name="listlapak">
+    <slot name="listuser">
       <v-toolbar flat color="white">
-        <v-toolbar-title>List Lapak</v-toolbar-title>
+        <v-toolbar-title>User Terdaftar</v-toolbar-title>
         <v-divider
           class="mx-2"
           inset
@@ -11,7 +11,7 @@
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="500px">
           <v-btn slot="activator" @click="navigateTo({
-            name: 'TambahLapak'
+            name: 'registeruser'
           })" color="primary" dark class="mb-2">New Item</v-btn>
           <v-card>
             <v-card-title>
@@ -50,30 +50,29 @@
       </v-toolbar>
       <v-data-table
         :headers="headers"
-        :items="lapak"
+        :items="user"
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.judul_post }}</td>
-          <td class="text-xs-center">{{ props.item.deskripsi_umum }}</td>
-          <td class="text-xs-center">{{ props.item.perbulan }}</td>
-          <td class="text-xs-center">{{ props.item.Penyedium.nama_penyedia }}</td>
-          <td class="text-xs-center">{{ props.item.Lokasi.kota }}</td>
+          <td class="text-xs-center">{{ props.item.firstname }} {{ props.item.lastname }}</td>
+          <td class="text-xs-center">{{ props.item.username }}</td>
+          <td class="text-xs-center">{{ props.item.no_hp }}</td>
+          <td class="text-xs-center">{{ props.item.role }}</td>
           <td class="justify-center layout px-0">
             <v-icon
               small
               class="mr-2"
-              @click="update_lapak({
-                name: 'editlapak',
+              @click="update_profile({
+                name: 'editprofile',
                 params: {
-                  lapakId: props.item.id
+                  userid: props.item.id
                 }
               })">
               edit
             </v-icon>
             <v-icon
               small
-              @click="delete_lapak(props)">
+              @click="delete_user(props)">
               delete
             </v-icon>
           </td>
@@ -87,25 +86,25 @@
 </template>
 
 <script>
-import LapakController from '@/services/LapakController'
+import UserController from '@/services/UserController'
 
 export default {
   data: () => ({
     dialog: false,
     headers: [
-      {
-        text: 'Judul post',
-        align: 'center',
-        sortable: false,
-        value: 'name'
-      },
-      { text: 'Deskripsi Umum', value: 'lapak' },
-      { text: 'Harga per bulan', value: 'fat' },
-      { text: 'Nama Penyedia', value: 'carbs' },
-      { text: 'Kota', value: 'protein' },
-      { text: 'Actions', value: 'name', sortable: false }
+      // {
+      //   text: 'Judul post',
+      //   align: 'center',
+      //   sortable: false,
+      //   value: 'name'
+      // },
+      { text: 'Nama', align: 'center', value: 'lapak' },
+      { text: 'Username', align: 'center', value: 'fat' },
+      { text: 'No Handphone', align: 'center', value: 'carbs' },
+      { text: 'Role', align: 'center', value: 'protein' },
+      { text: 'Actions', align: 'center', value: 'name', sortable: false }
     ],
-    lapak: [],
+    user: [],
     desserts: [],
     editedIndex: -1,
     editedItem: {
@@ -138,30 +137,30 @@ export default {
 
   created () {
     this.initialize()
-    this.getLapak()
+    this.get_user()
   },
 
   methods: {
     navigateTo (route) {
       return this.$router.push(route)
     },
-    delete_lapak (props) {
-      LapakController.delete(props.item.id)
+    delete_user (props) {
+      UserController.delete(props.item.id)
         .then((resp) => {
-          this.$swal('Deleted', 'Lapak has been deleted.', 'success')
+          this.$swal('Deleted', 'Profile has been deleted.', 'success')
             .then(() => {
-              this.$router.push('list-lapak')
+              this.$router.push('list-user')
             })
         })
     },
-    update_lapak (route) {
+    update_profile (route) {
       this.$router.push(route)
     },
-    getLapak () {
+    get_user () {
       try {
-        LapakController.index()
+        UserController.index()
           .then((resp) => {
-            this.lapak = resp.data
+            this.user = resp.data
             console.log(resp.data)
           })
       } catch (e) {
@@ -169,22 +168,11 @@ export default {
       }
     },
     initialize () {
-      this.lapak = [
+      this.user = [
         {
-          lapak: this.lapak.judul_post
+          user: this.user.email
         }
       ]
-    },
-
-    editItem (item) {
-      this.editedIndex = this.desserts.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
-
-    deleteItem (item) {
-      const index = this.desserts.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
     },
 
     close () {
