@@ -91,13 +91,17 @@
           <v-select
           :items="loc"
           name="loc"
-          v-model="lapak.LokasiId"
+          v-model="lapak.Posts.LokasiId"
           item-text="kota"
           item-value="id"
           class="pt-2 pl-2 pr-2"
-          label="Lokasi"
+          label="Lokasi lapak"
           solo
           ></v-select>
+          <v-text-field
+          label="Kecamatan"
+          v-model="lapak.kecamatan"
+        ></v-text-field>
         </v-container>
       </v-window-item>
 
@@ -111,6 +115,26 @@
             label="Alamat Penyedia"
             v-model="lapak.Posts.alamat">
           </v-text-field>
+          <v-select
+          :items="loc"
+          name="loc"
+          v-model="lapak.LokasiId"
+          item-text="kota"
+          item-value="id"
+          class="pt-2 pl-2 pr-2"
+          label="Lokasi Penyedia"
+          solo
+          ></v-select>
+          <v-text-field
+          :mask="'####-####-#######'"
+          v-model="lapak.no_hp"
+          label="Nomor Handphone"
+          ></v-text-field>
+          <b-form-select v-model="lapak.Posts.status">
+            <option class="form-control" v-for="statue in status" v-bind:key="statue.id" v-bind:value="statue.value">
+              {{ statue.value }}
+            </option>
+          </b-form-select>
         </v-card-text>
       </v-window-item>
     </v-window>
@@ -151,7 +175,7 @@
 </template>
 
 <script>
-// import LapakController from '@/services/LapakController'
+import LapakController from '@/services/LapakController'
 import LokasiController from '@/services/LokasiController'
 import KategoriController from '@/services/KategoriController'
 // import axios from 'axios'
@@ -160,36 +184,31 @@ export default {
   data () {
     return {
       step: 1,
-      option: [
-        'hehe',
-        'huhu'
-      ],
-      kecamatan: [
-        'Ogan Ilir',
-        'Ugun Ulur'
-      ],
       loc: [],
       cat: [],
-      status_post: [
-        'Tersedia',
-        'Tidak tersedia'
+      status: [
+        { id: '1', value: 'Tersedia' },
+        { id: '2', value: 'Tidak Tersedia' }
       ],
       lapak: {
         nama_penyedia: '',
         alamat: '',
+        kecamatan: '',
         LokasiId: '',
+        no_hp: '',
         Posts: {
           judul_post: '',
           deskripsi_umum: '',
-          status_post: '',
+          status: '',
           perjam: '',
           perhari: '',
           perbulan: '',
           pertahun: '',
+          LokasiId: '',
           foto: '',
           KategoriId: '',
           Fasilitas: [
-            { nama_fasilitas: '' }
+
           ]
         }
       }
@@ -224,23 +243,24 @@ export default {
         })
     },
     submitlapak () {
-      // let lapak = {
-      //   nama_penyedia: this.lapak.nama_penyedia,
-      //   alamat: this.lapak.alamat,
-      //   kecamatan: this.lapak.kecamatan,
-      //   LokasiId: this.lapak.LokasiId,
-      //   judul_post: this.lapak.Posts.judul_post,
-      //   deskripsi_umum: this.lapak.Posts.deskripsi_umum,
-      //   status_lapak: this.lapak.Posts.status_post,
-      //   perjam: this.lapak.Posts.perjam,
-      //   perhari: this.lapak.Posts.perhari,
-      //   perbulan: this.lapak.Posts.perbulan,
-      //   pertahun: this.lapak.Posts.pertahun
-      // }
-      // LapakController.register_lapak(lapak)
-      //   .then((resp) => {
-      //     console.log(resp)
-      //   })
+      // console.log(this.lapak)
+      let lapak = {
+        nama_penyedia: this.lapak.nama_penyedia,
+        alamat: this.lapak.alamat,
+        kecamatan: this.lapak.kecamatan,
+        LokasiId: this.lapak.LokasiId,
+        judul_post: this.lapak.Posts.judul_post,
+        deskripsi_umum: this.lapak.Posts.deskripsi_umum,
+        status_lapak: this.lapak.Posts.status_post,
+        perjam: this.lapak.Posts.perjam,
+        perhari: this.lapak.Posts.perhari,
+        perbulan: this.lapak.Posts.perbulan,
+        pertahun: this.lapak.Posts.pertahun
+      }
+      LapakController.register_lapak(lapak)
+        .then((resp) => {
+          console.log(resp)
+        })
 
       // this.$store.dispatch('submit_lapak', {
       //   nama_penyedia: this.lapak.nama_penyedia,
@@ -258,16 +278,6 @@ export default {
       //   .then((resp) => {
       //     console.log(resp)
       //   })
-
-      this.$http.post('http://localhost:8081/post/', this.lapak,
-        {
-          headers: {
-            'content-type': 'application/json'
-          }
-        })
-        .then(result => {
-          console.log(result.data)
-        })
     }
   }
 }
